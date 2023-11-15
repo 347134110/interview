@@ -1,3 +1,85 @@
+#### 基本数据类型
+
+整数类型：byte、short、int、long
+
+浮点类型：float、double
+
+字符类型：char
+
+布尔类型：boolean
+
+|     类型     | 占用存储空间 |        表数范围         |                           | 默认值 |
+| :----------: | :----------: | :---------------------: | ------------------------- | ------ |
+|     byte     |    1字节     | -128~127（-2^7 ~ 2^7-1) |                           | 0      |
+|    short     |    2字节     |     -2^15 ~ 2^15-1      |                           | 0      |
+|     int      |    4字节     |     -2^31 ~ 2^31-1      |                           | 0      |
+|     long     |    8字节     |     -2^63 ~ 2^36-1      |                           | 0      |
+| 单精度float  |    4字节     |  -3.403e38 ~ 3.403e38   | 尾数可以精确到7位有效数字 | 0.0f   |
+| 双精度double |    8字节     | -1.798e308 ~ 1.798e308  | 浮点型常量默认类型        | 0.0    |
+|     char     |    2字节     |                         |                           | \u0000 |
+|   boolean    |     1位      |                         |                           | false  |
+
+#### 基本数据类型变量间运算规则
+
+
+
+#### 修饰符
+
+##### 访问修饰符
+
+访问修饰符用于控制Java类、Java接口或类中的成员变量和方法的访问权限，可以分为public、protected、private和默认(即不加任何修饰符)四种类型
+
+| 访问级别 | 访问控制修饰符 | 同类 |  同包  | 子类(不同包) | 不同包(其他类) |
+| :------: | :------------: | :--: | :----: | :----------: | :------------: |
+|   公共   |     public     | 允许 |  允许  |     允许     |      允许      |
+|  受保护  |   protected    | 允许 |  允许  |     允许     |     不允许     |
+|   默认   |   缺省修饰符   | 允许 |  允许  |    不允许    |     不允许     |
+|   私有   |    private     | 允许 | 不允许 |    不允许    |     不允许     |
+
+![](./images/访问修饰符图解.jpg)
+
+##### 非访问修饰符
+
+- **final**：
+
+  final修饰符可以用于Java类、Java方法和Java变量中，表示该类、方法或变量只能`被赋值一次`。
+
+  在声明final`变量`时必须要`赋初值`，而final`方法`表示该方法`不可以被子类重写`，final类代表该`类不可以被继承`。
+
+- **static**:
+
+  static修饰符可以用于Java类、Java变量和Java方法中，表示该类、变量或方法属于`类而非实例化对象`，多个实例的`静态成员变量`可以`共享`。而`静态方法`可以`直接调用`，无需实例化对象，使用类名.方法名的方式即可调用。
+
+- **abstract**:
+
+  abstract修饰符可以用于Java类、Java方法中，表示该类或方法`只是一个声明而没有实现`。
+
+  一旦Java类使用abstract修饰符，则该类就必须被声明为抽象类(abstract class)。而抽象方法必须被声明在抽象类中，子类必须实现父类的所有抽象方法。
+
+- **synchronized**:
+
+  synchronized修饰符可以用于Java方法中，表示该方法只能在`一个线程中执行`。当一个线程正在访问synchronized方法时，其他线程必须等待该线程执行完成后才能继续执行该方法。
+
+##### 其他非访问修饰符
+
+- **volatile**：
+
+  volatile修饰符可以用于Java变量中，可以确保`多个线程`之间变量值的`可见性`。
+
+  当多个线程同时访问同一个volatile变量时，它们会从`内存`中读取该变量的值，而不是从线程的`本地缓存`中读取。同样的，当`更新`一个volatile变量时，它会`立即写入到内存`中，而`不是延迟更新`。
+
+- transient：
+
+  transient修饰符可以用于Java变量中，表示该变量不参与Java序列化。当Java对象被序列化时，transient变量的值将被忽略。
+
+- native：
+
+  native修饰符可以用于Java方法中，表示该方法是使用`其他编程语言`编写的库函数。只有声明有native修饰符的方法才可以使用Java调用其他语言编写的方法。
+
+- strictfp:
+
+  strictfp修饰符可以用于Java方法中或Java类声明中，表示该方法或类的浮点运算采用IEEE 754规范。
+
 #### 哈希表的工作原理
 
 ##### 1. 概述（数据结构）
@@ -629,3 +711,308 @@ public static int[] radixSort(int[] arr, int d){
     return arr;
 }
 ```
+
+
+
+#### 设计模式
+
+##### 1. 单例模式
+
+- 概述
+
+所谓类的单例设计模式，就是采取一定的方法保证在整个的软件系统中，对某个类只能存在 `一个对象实例`，并且该类`只提供一个取得其对象实例的方法`（静态方法）
+
+- 八种方式
+  - 饿汉式（静态常量）
+  - 饿汉式（静态代码块）
+  - 懒汉式（线程不安全）
+  - 懒汉式（线程安全，同步方法）
+  - 懒汉式（线程不安全，同步代码块）
+  - 双重检查
+  - 静态内部类
+  - 枚举
+
+###### 1.饿汉式（静态常量）
+
+- 概述
+
+  1. 构造器私有化（防止外部 new）
+
+  2. 类的内部创建对象
+
+  3. 向外暴露一个静态的公共方法 `getInstance`
+
+- 代码
+
+```java
+public class Singleton(){
+    private Singleton(){}
+    private static final Singleton instance = new Singleton();
+    
+    public static Singleton getInstance(){
+        return instance;
+    }
+}
+```
+
+- 优缺点
+
+  - 优点：这种写法比较简单，就是在类装载的时候就完成实例化。避免了线程同步问题
+
+  - 缺点：在类装载的时候就完成实例化，`没有达到 Lazy Loading` 的效果。如果从始至终从未使用过这个实例，则会造成内存的浪费
+
+  - 这种方式基于 classloader 机制避免了多线程的同步问题。不过，instance 在类装载时就实例化，在单例模式中大多数都是调用`getlnstance` 方法，但是导致类装载的原因有很多种，因此不能确定有其他的方式（或者其他的静态方法）导致类装载，这时候初始化 instance 就没有达到 Lazy loading 的效果
+
+  - 结论：这种单例模式可用，可能造成`内存浪费`
+
+###### 2.饿汉式（静态代码块）
+
+- 概述
+  1. 构造器私有化
+  2. 类的内部声明对象
+  3. 在静态代码块中创建对象
+  4. 向外暴露一个静态的公共方法
+
+- 代码
+
+```java
+public class Singleton{
+    // 1、构造器私有化
+    private Singleton(){}
+    
+    // 2、类的内部声明对象
+    private static Singletion instance;
+    
+    // 3、在静态代码块中创建对象
+    static {
+        instance = new Singleton();
+    }
+    
+    // 4、向外暴露一个静态的公共方法
+    public static Singleton getInstance(){
+        return instance;
+    }
+}
+```
+
+
+
+- 优缺点
+  - 这种方式和上面的方式其实类似，只不过将类实例化的过程放在了静态代码块中，也是在类装载的时候，就执行静态代码块中的代码，初始化类的实例。优缺点和上面是一样的。
+  - 结论：这种单例模式可用，但是可能造成内存浪费
+
+###### 3.懒汉式（线程不安全）
+
+- 概述
+  1. 构造器私有化
+  2. 类的内部声明对象
+  3. 向外暴露一个静态的公共方法，当使用到该方法时，才去创建 instance
+
+- 代码
+
+```java
+public class Singleton{
+    // 1、构造器私有化
+    private Singleton(){}
+    
+    // 2、类的内部声明对象
+    private static Singletion instance;
+    
+    // 3. 向外暴露一个静态的公共方法，当使用到该方法时，才去创建 instance
+    public static Singleton getInstance(){
+        if(instance == null){
+            instance = new Singletion();
+        }
+        return instance;
+    }
+}
+```
+
+
+
+- 优缺点
+  - 起到了 Lazy Loading 的效果，但是只能在`单线程`下使用
+  - 如果在多线程下，一个线程进入了判断语句块，还未来得及往下执行，另一个线程也通过了这个判断语句，这时便会`产生多个实例`
+  - 结论：在实际开发中，不要使用这种方式
+
+###### 4.懒汉式（线程安全，同步方法）
+
+- 概述
+  1. 构造器私有化
+  2. 类的内部声明对象
+  3. 向外暴露一个静态的公共方法，加入同步处理的代码，解决线程安全问题
+
+- 代码
+
+```java
+public class Singleton{
+    // 1、构造器私有化
+    private Singleton(){}
+    
+    // 2、类的内部声明对象
+    private static Singletion instance;
+    
+    // 3. 向外暴露一个静态的公共方法，加入同步处理的代码，解决线程安全问题
+    public static synchronized Singleton getInstance(){
+        return instance;
+    }
+}
+```
+
+- 优缺点
+  - `解决了线程不安全问题`
+  - `效率太低`了，每个线程在想获得类的实例时候，执行`getlnstance()`方法都要进行同步。而其实这个方法只执行一次实例化代码就够了，后面的想获得该类实例，直接return就行了。后续仍需对方法进行同步效率太低。（粒度太大了）
+  - 结论：在实际开发中，不推荐使用这种方式
+
+###### 5.懒汉式（线程不安全，同步代码块）
+
+- 概述
+  1. 构造器私有化
+  2. 类的内部声明对象
+  3. 向外暴露一个静态的公共方法，加入同步处理的代码块
+
+- 代码
+
+```java
+public class Singleton{
+    // 1、构造器私有化
+    private Singleton(){}
+    
+    // 2、类的内部声明对象
+    private static Singletion instance;
+    
+    // 3、向外暴露一个静态的公共方法，加入同步处理的代码块
+    publiv static Singleton getInstance(){
+        if(instance == null){
+            synchronized (Singleton.class) {
+                instance = new Singleton();
+            }
+        }
+        return instance;
+    }      
+}
+```
+
+
+
+- 优缺点
+  - 这种方式，本意是想对第四种实现方式的改进，因为前面同步方法效率太低，改为同步产生实例化的的代码块
+  - 但是这种同步并不能起到线程同步的作用。跟第3种实现方式遇到的情形一致，假如一个线程进入了判断语句块，还未来得及往下执行，另一个线程也通过了这个判断语句，这时便会产生多个实例
+  - 结论：在实际开发中，不能使用这种方式
+
+###### 6.双重检查（推荐）
+
+- 概述
+  1. 构造器私有化
+  2. 类的内部创建对象，同时用volatile关键字修饰修饰
+  3. 向外暴露一个静态的公共方法，加入同步处理的代码块，并进行双重判断，解决线程安全问题
+
+- 代码
+
+```java
+public class Singleton{
+    // 1、构造器私有化
+    private Singleton(){}
+    
+    // 2、类的内部声明对象，同时用volatile关键字修饰修饰
+    private static volatile Singletion instance;  
+    
+    //3.向外暴露一个静态的公共方法，加入同步处理的代码块，并进行双重判断，解决线程安全问题
+    publiv static Singleton getInstance(){
+        if(instance == null){
+            synchronized (Singleton.class){
+                if(instance == null){
+                    instance = new Singleton();
+                }
+            }
+        }
+        return instance;
+    }
+}
+```
+
+volatile关键字：当多个线程同时访问同一个volatile变量时，它们会从`内存`中读取该变量的值，而不是从线程的`本地缓存`中读取。同样的，当`更新`一个volatile变量时，它会`立即写入到内存`中，而`不是延迟更新`。
+
+确保了多个线程都加入了第一个判断，在第一个线程实例化后，其他线程不再从本地缓存中读取null的instance，而是实例化的instance，不再加入第二个判断。
+
+- 优缺点
+
+  - Double-Check 概念是多线程开发中常使用到的，我们进行了两次检查，这样就可以保证线程安全了
+
+  - 这样实例化代码只用执行一次，后面再次访问时直接 return 实例化对象，也避免的反复进行方法同步
+
+  - `线程安全；延迟加载；效率较高`
+
+  - 结论：在实际开发中，推荐使用这种单例设计模式
+
+###### 7.静态内部类(推荐)
+
+- 概述
+  1. 构造器私有化
+  2. 定义一个静态内部类，内部定义当前类的静态属性
+  3. 向外暴露一个静态的公共方法
+
+- 代码
+
+```java
+public class Singleton{
+    // 1、构造器私有化
+    private Singleton(){}
+    
+    // 2、定义一个静态内部类，内部定义当前类的静态属性
+    private static class SingletonInstance(){
+        private static final Singleton instance = new Singleton();
+    }
+    
+    // 3、向外暴露一个静态的公共方法
+    publiv static Singleton getInstance(){
+        return SingletonInstance.instance;
+    }
+}
+```
+
+- 优缺点
+
+  - 这种方式采用了类装载的机制，来保证初始化实例时只有一个线程
+
+  - 静态内部类方式在 Singleton 类被装载时并不会立即实例化，而是在需要实例化时，调用`getlnstance`方法，才会装载Singletonlnstance 类，从而完成 Singleton 的实例化
+
+  - 类的静态属性只会在第一次加载类的时候初始化，JVM帮助我们保证了线程的安全性，在类进行初始化时，别的线程是无法进入的
+
+  - 优点：避免了线程不安全，利用静态内部类特点实现延迟加载，效率高
+
+  - 结论：推荐使用
+
+###### 8.枚举
+
+- 代码
+
+```java
+public enum Singleton {
+    INSTANCE;
+
+    public void sayHello() {
+        System.out.println("Hello World");
+    }
+}
+```
+
+- 优缺点
+
+  - 这借助 JDK1.5 中添加的枚举来实现单例模式。不仅能避免多线程同步问题，而且还能防止反序列化重新创建新的对象
+
+  - 这种方式是 Effective Java 作者 Josh Bloch 提倡的方式
+
+  - 结论：推荐使用
+
+###### JDK源码分析
+
+JDK中 java.lang.Runtime 就是经典的单例模式
+
+![](./images/单例模式Runtime.jpg)
+
+###### 注意事项
+
+● 单例模式保证了系统内存中该类`只存在一个对象`，`节省了系统资源`，对于一些需要`频繁创建销毁`的对象，使用单例模式可以`提高系统性能`
+● 当想实例化一个单例类的时候，必须要记住使用相应的`获取对象的方法`，而不是使用 new
+● 单例模式使用的场景：需要`频繁的进行创建和销毁的对象`、`创建对象时耗时过多或耗费资源过多但又经常用到的对象`（即：重量级对象）、`工具类对象`、`频繁访问数据库或文件的对象`（比如数据源、session 工厂等）			
